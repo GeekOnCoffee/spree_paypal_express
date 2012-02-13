@@ -111,7 +111,7 @@ CheckoutController.class_eval do
 
   def paypal_finish 
     load_order
-
+    @order.adjustments.each{|adj| adj.update_attributes(:locked, true)}
     opts = { :token => params[:token], :payer_id => params[:PayerID] }.merge all_opts(@order, params[:payment_method_id], 'payment' )
     gateway = paypal_gateway
 
