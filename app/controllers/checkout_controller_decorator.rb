@@ -196,7 +196,11 @@ CheckoutController.class_eval do
     
     load_order
     payment_method = PaymentMethod.find(params[:order][:payments_attributes].first[:payment_method_id])
-
+    if !params[:order][:coupon_code].blank?
+      redirect_to checkout_state_url("payment")
+      return
+    end
+    
     if payment_method.kind_of?(BillingIntegration::PaypalExpress) || payment_method.kind_of?(BillingIntegration::PaypalExpressUk)
       redirect_to paypal_payment_order_checkout_url(@order, :payment_method_id => payment_method)
     end
